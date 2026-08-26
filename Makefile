@@ -4,10 +4,10 @@ export
 export PROJECT_ROOT=$(shell pwd)
 
 env-up:
-	docker compose up -d todolist-postgres
+	@docker compose up -d todolist-postgres
 
 env-down:
-	docker compose down todolist-postgres
+	@docker compose down todolist-postgres
 
 env-cleanup:
 	@read -p "Clear all volume environment files? Risk of data loss. [y/N]: " ans; \
@@ -19,6 +19,12 @@ env-cleanup:
 	  echo "Environment files cleanup is cancel"; \
 	fi
 
+env-port-forwarder:
+	@docker compose up -d port-forwarder
+
+env-port-close:
+	@docker compose down port-forwarder
+
 migrate-create:
 	@if [ -z "$(seq)" ]; then \
   		echo "The required parameter 'seq' is missing. Example: make migrate-create seq=init"; \
@@ -29,3 +35,20 @@ migrate-create:
 		-ext sql \
 		-dir ./migrations \
 		-seq "$(seq)"
+
+migrate-up:
+	@make migrate-action action=up
+
+migrate-down:
+	@make migrate-action action=down
+
+migrate-action:
+	@if [ -z "$(action)" ]; then \
+  		echo "The required parameter 'action' is missing. Example: make migrate-action action=up"; \
+  		exit 1; \
+  	fi; \
+	docker compose run --rm todolist-postgres-migrate \
+        		-path ./migrations \
+        		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@todolist-postgres:5432/${POSTGRES_DB}?sslmode=disable \
+        		"$(action)"
+
