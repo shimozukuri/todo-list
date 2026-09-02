@@ -1,6 +1,7 @@
 include .env
 export
 
+
 export PROJECT_ROOT=$(shell pwd)
 
 env-up:
@@ -12,7 +13,7 @@ env-down:
 env-cleanup:
 	@read -p "Clear all volume environment files? Risk of data loss. [y/N]: " ans; \
 	if [ "$$ans" = "y" ]; then \
-	  docker compose down todolist-postgres && \
+	  docker compose down todolist-postgres port-forwarder && \
 	  rm -rf out/pgdata && \
 	  echo "Environment files is clear"; \
 	else \
@@ -52,3 +53,8 @@ migrate-action:
         		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@todolist-postgres:5432/${POSTGRES_DB}?sslmode=disable \
         		"$(action)"
 
+todolist-run:
+	@export LOGGER_FOLDER=${PROJECT_ROOT}/out/logs && \
+	export POSTGRES_HOST=localhost && \
+	go mod tidy && \
+	go run ./cmd/todo-list/main.go
