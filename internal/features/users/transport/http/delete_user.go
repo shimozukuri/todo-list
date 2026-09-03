@@ -7,9 +7,7 @@ import (
 	"todo-list/internal/core/transport/http/utils"
 )
 
-type GetUserResponse UserDTOResponse
-
-func (h *UsersHTTPHandler) GetUser(w http.ResponseWriter, r *http.Request) {
+func (h *UsersHTTPHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)
 	responseHandler := core_http_response.NewHTTPResponseHandler(log, w)
@@ -24,17 +22,15 @@ func (h *UsersHTTPHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userDomain, err := h.usersService.GetUser(ctx, userID)
+	err = h.usersService.DeleteUser(ctx, userID)
 	if err != nil {
 		responseHandler.ErrorResponse(
 			err,
-			"failed to get user",
+			"failed to delete user",
 		)
 
 		return
 	}
 
-	response := GetUserResponse(userDTOFromDomain(userDomain))
-
-	responseHandler.JSONResponse(response, http.StatusOK)
+	responseHandler.NoContentResponse()
 }

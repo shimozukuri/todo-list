@@ -5,7 +5,7 @@ import (
 	"net/http"
 	core_logger "todo-list/internal/core/logger"
 	core_http_response "todo-list/internal/core/transport/http/response"
-	core_http_utils "todo-list/internal/core/utils"
+	"todo-list/internal/core/transport/http/utils"
 )
 
 type GetUsersResponse []UserDTOResponse

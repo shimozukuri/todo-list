@@ -50,7 +50,7 @@ migrate-action:
   	fi; \
 	docker compose run --rm todolist-postgres-migrate \
         		-path ./migrations \
-        		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@todolist-postgres:5432/${POSTGRES_DB}?sslmode=disable \
+        		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@todolist-env-postgres:5432/${POSTGRES_DB}?sslmode=disable \
         		"$(action)"
 
 todolist-run:
