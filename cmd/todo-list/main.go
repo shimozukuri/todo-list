@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 	core_logger "todo-list/internal/core/logger"
-	core_postgres_pool "todo-list/internal/core/repository/postgres/pool"
+	"todo-list/internal/core/repository/postgres/pool/pgx"
 	core_http_middleware "todo-list/internal/core/transport/http/middleware"
 	core_http_server "todo-list/internal/core/transport/http/server"
 	users_postgres_repository "todo-list/internal/features/users/repository/postgres"
@@ -32,9 +32,9 @@ func main() {
 	defer logger.Close()
 
 	logger.Debug("initializing postgres connection pool")
-	pool, err := core_postgres_pool.NewConnectionPool(
+	pool, err := core_pgx_pool.NewPool(
 		ctx,
-		core_postgres_pool.NewConfigMust(),
+		core_pgx_pool.NewConfigMust(),
 	)
 	if err != nil {
 		logger.Fatal("failed to init postgres connection pool", zap.Error(err))
@@ -42,8 +42,8 @@ func main() {
 	defer pool.Close()
 
 	logger.Debug("initializing feature", zap.String("feature", "users"))
-	usersRepositotry := users_postgres_repository.NewUsersRepository(pool)
-	usersService := users_service.NewUsersService(usersRepositotry)
+	usersRepository := users_postgres_repository.NewUsersRepository(pool)
+	usersService := users_service.NewUsersService(usersRepository)
 	usersTransportHTTP := users_transport_http.NewUsersHTTPHandler(usersService)
 
 	logger.Debug("initializing HTTP server")
@@ -52,8 +52,8 @@ func main() {
 		logger,
 		core_http_middleware.RequestID(),
 		core_http_middleware.Logger(logger),
-		core_http_middleware.Panic(),
 		core_http_middleware.Trace(),
+		core_http_middleware.Panic(),
 	)
 	apiVersionRouter := core_http_server.NewAPIVersionRouter(core_http_server.ApiVersion1)
 	apiVersionRouter.RegisterRouters(usersTransportHTTP.Routes()...)

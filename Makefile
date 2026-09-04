@@ -14,7 +14,7 @@ env-cleanup:
 	@read -p "Clear all volume environment files? Risk of data loss. [y/N]: " ans; \
 	if [ "$$ans" = "y" ]; then \
 	  docker compose down todolist-postgres port-forwarder && \
-	  rm -rf out/pgdata && \
+	  rm -rf ${PROJECT_ROOT}/out/pgdata && \
 	  echo "Environment files is clear"; \
 	else \
 	  echo "Environment files cleanup is cancel"; \
@@ -34,7 +34,7 @@ migrate-create:
 	docker compose run --rm todolist-postgres-migrate \
 		create \
 		-ext sql \
-		-dir ./migrations \
+		-dir ${PROJECT_ROOT}/migrations \
 		-seq "$(seq)"
 
 migrate-up:
@@ -49,7 +49,7 @@ migrate-action:
   		exit 1; \
   	fi; \
 	docker compose run --rm todolist-postgres-migrate \
-        		-path ./migrations \
+        		-path /migrations \
         		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@todolist-env-postgres:5432/${POSTGRES_DB}?sslmode=disable \
         		"$(action)"
 
@@ -57,4 +57,4 @@ todolist-run:
 	@export LOGGER_FOLDER=${PROJECT_ROOT}/out/logs && \
 	export POSTGRES_HOST=localhost && \
 	go mod tidy && \
-	go run ./cmd/todo-list/main.go
+	go run ${PROJECT_ROOT}/cmd/todo-list/main.go

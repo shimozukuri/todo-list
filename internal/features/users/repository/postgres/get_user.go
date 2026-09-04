@@ -2,11 +2,11 @@ package users_postgres_repository
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"fmt"
 	"todo-list/internal/core/domain"
 	core_errors "todo-list/internal/core/errors"
+	core_postgres_pool "todo-list/internal/core/repository/postgres/pool"
 )
 
 func (r *UsersRepository) GetUser(
@@ -19,7 +19,7 @@ func (r *UsersRepository) GetUser(
 	query := `
 		SELECT id, version, full_name, phone_number
 		FROM todolist.users
-		WHERE id = $1
+		WHERE id = $1;
 	`
 
 	row := r.pool.QueryRow(ctx, query, id)
@@ -33,7 +33,7 @@ func (r *UsersRepository) GetUser(
 		&userModel.PhoneNumber,
 	)
 	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
+		if errors.Is(err, core_postgres_pool.ErrNoRows) {
 			return domain.User{}, fmt.Errorf(
 				"user with id='%d': %w",
 				id,
