@@ -1,4 +1,4 @@
-package users_service
+package tasks_service
 
 import (
 	"context"
@@ -7,11 +7,10 @@ import (
 	core_errors "todo-list/internal/core/errors"
 )
 
-func (s *UsersService) GetUsers(
+func (s *TasksService) GetTasks(
 	ctx context.Context,
-	limit *int,
-	offset *int,
-) ([]domain.User, error) {
+	userID, limit, offset *int,
+) ([]domain.Task, error) {
 	if limit != nil && *limit < 0 {
 		return nil, fmt.Errorf(
 			"limit must be a positive: %w",
@@ -26,10 +25,10 @@ func (s *UsersService) GetUsers(
 		)
 	}
 
-	users, err := s.usersRepository.GetUsers(ctx, limit, offset)
+	taskDomains, err := s.taskRepository.GetTasks(ctx, userID, limit, offset)
 	if err != nil {
-		return nil, fmt.Errorf("get users from repository: %w", err)
+		return nil, fmt.Errorf("get tasks from repository: %w", err)
 	}
 
-	return users, nil
+	return taskDomains, nil
 }
