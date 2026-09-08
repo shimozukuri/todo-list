@@ -22,15 +22,15 @@ func (r *PatchUserRequest) Validate() error {
 			return fmt.Errorf("'FullName' can't be NULL")
 		}
 
-		fullNameLen := len([]rune(*r.FullName.Value))
-		if fullNameLen < 3 || fullNameLen > 100 {
+		fullNameLength := len([]rune(*r.FullName.Value))
+		if fullNameLength < 3 || fullNameLength > 100 {
 			return fmt.Errorf("'FullName' length must be between 3 and 100")
 		}
 	}
 
 	if r.PhoneNumber.Set && r.PhoneNumber.Value != nil {
-		phoneNumberLen := len([]rune(*r.PhoneNumber.Value))
-		if phoneNumberLen < 10 || phoneNumberLen > 15 {
+		phoneNumberLength := len([]rune(*r.PhoneNumber.Value))
+		if phoneNumberLength < 10 || phoneNumberLength > 15 {
 			return fmt.Errorf("'PhoneNumber' length must be between 10 and 15")
 		}
 

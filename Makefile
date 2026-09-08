@@ -49,9 +49,18 @@ migrate-action:
   		exit 1; \
   	fi; \
 	docker compose run --rm todolist-postgres-migrate \
-        		-path /migrations \
+        		-path ./migrations \
         		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@todolist-env-postgres:5432/${POSTGRES_DB}?sslmode=disable \
         		"$(action)"
+
+logs-cleanup:
+	@read -p "Clear all log files? Risk of log loss. [y/N]: " ans; \
+	if [ "$$ans" = "y" ]; then \
+		rm -rf ${PROJECT_ROOT}/out/logs && \
+		echo "Log files is clear"; \
+	else \
+		echo "Log files cleanup is cancel"; \
+	fi
 
 todolist-run:
 	@export LOGGER_FOLDER=${PROJECT_ROOT}/out/logs && \
