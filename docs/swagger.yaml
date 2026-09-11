@@ -1,0 +1,633 @@
+basePath: /api/v1
+definitions:
+  github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse:
+    properties:
+      error:
+        example: full error text
+        type: string
+      message:
+        example: short human-readable message
+        type: string
+    type: object
+  internal_features_statistics_transport_http.GetStatisticsResponse:
+    properties:
+      tasks_average_completion_time:
+        example: 5m30s
+        type: string
+      tasks_completed:
+        example: 2
+        type: integer
+      tasks_completed_rate:
+        example: 10
+        type: number
+      tasks_created:
+        example: 20
+        type: integer
+    type: object
+  internal_features_tasks_transport_http.CreateTaskRequest:
+    properties:
+      author_user_id:
+        example: 1
+        type: integer
+      description:
+        example: 2 liters
+        maxLength: 1000
+        minLength: 1
+        type: string
+      title:
+        example: Buy CocaCola
+        maxLength: 100
+        minLength: 1
+        type: string
+    required:
+    - author_user_id
+    - title
+    type: object
+  internal_features_tasks_transport_http.CreateTaskResponse:
+    properties:
+      author_user_id:
+        example: 1
+        type: integer
+      completed:
+        example: false
+        type: boolean
+      completed_at:
+        example: "2006-01-01T00:00:00.000000Z"
+        type: string
+      created_at:
+        example: "null"
+        type: string
+      description:
+        example: 2 liters
+        type: string
+      id:
+        example: 1
+        type: integer
+      title:
+        example: Buy CocaCola
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_features_tasks_transport_http.GetTaskResponse:
+    properties:
+      author_user_id:
+        example: 1
+        type: integer
+      completed:
+        example: false
+        type: boolean
+      completed_at:
+        example: "2006-01-01T00:00:00.000000Z"
+        type: string
+      created_at:
+        example: "null"
+        type: string
+      description:
+        example: 2 liters
+        type: string
+      id:
+        example: 1
+        type: integer
+      title:
+        example: Buy CocaCola
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_features_tasks_transport_http.PatchTaskRequest:
+    properties:
+      completed:
+        example: true
+        type: boolean
+      description:
+        example: 1 kilogram
+        type: string
+      title:
+        example: Buy chicken
+        type: string
+    type: object
+  internal_features_tasks_transport_http.PatchTaskResponse:
+    properties:
+      author_user_id:
+        example: 1
+        type: integer
+      completed:
+        example: false
+        type: boolean
+      completed_at:
+        example: "2006-01-01T00:00:00.000000Z"
+        type: string
+      created_at:
+        example: "null"
+        type: string
+      description:
+        example: 2 liters
+        type: string
+      id:
+        example: 1
+        type: integer
+      title:
+        example: Buy CocaCola
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_features_tasks_transport_http.TasksDTOResponse:
+    properties:
+      author_user_id:
+        example: 1
+        type: integer
+      completed:
+        example: false
+        type: boolean
+      completed_at:
+        example: "2006-01-01T00:00:00.000000Z"
+        type: string
+      created_at:
+        example: "null"
+        type: string
+      description:
+        example: 2 liters
+        type: string
+      id:
+        example: 1
+        type: integer
+      title:
+        example: Buy CocaCola
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_features_users_transport_http.CreateUserRequest:
+    properties:
+      full_name:
+        example: Ivan Ivanov
+        maxLength: 100
+        minLength: 3
+        type: string
+      phone_number:
+        example: "+79998887766"
+        maxLength: 15
+        minLength: 10
+        type: string
+    required:
+    - full_name
+    type: object
+  internal_features_users_transport_http.CreateUserResponse:
+    properties:
+      full_name:
+        example: Ivan Ivanov
+        type: string
+      id:
+        example: 1
+        type: integer
+      phone_number:
+        example: "+79998887766"
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_features_users_transport_http.GetUserResponse:
+    properties:
+      full_name:
+        example: Ivan Ivanov
+        type: string
+      id:
+        example: 1
+        type: integer
+      phone_number:
+        example: "+79998887766"
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_features_users_transport_http.PatchUserRequest:
+    properties:
+      full_name:
+        example: Petr Petrovich
+        type: string
+      phone_number:
+        example: "+71112223344"
+        type: string
+    type: object
+  internal_features_users_transport_http.PatchUserResponse:
+    properties:
+      full_name:
+        example: Ivan Ivanov
+        type: string
+      id:
+        example: 1
+        type: integer
+      phone_number:
+        example: "+79998887766"
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_features_users_transport_http.UserDTOResponse:
+    properties:
+      full_name:
+        example: Ivan Ivanov
+        type: string
+      id:
+        example: 1
+        type: integer
+      phone_number:
+        example: "+79998887766"
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+host: 127.0.0.1:5050
+info:
+  contact: {}
+  description: ToDo Application REST-API scheme
+  title: Golang ToDo API
+  version: "1.0"
+paths:
+  /statistics:
+    get:
+      description: Get statistics with optional filtering by author user ID and date
+        range
+      parameters:
+      - description: Filter by author user ID
+        in: query
+        name: user_id
+        type: integer
+      - description: 'Start date for statistics calculation (inclusive), format: YYYY-MM-DD'
+        in: query
+        name: from
+        type: string
+      - description: 'End date for statistics calculation (exclusive), format: YYYY-MM-DD'
+        in: query
+        name: to
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success to get statistics
+          schema:
+            $ref: '#/definitions/internal_features_statistics_transport_http.GetStatisticsResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+      summary: Get statistics
+      tags:
+      - statistics
+  /tasks:
+    get:
+      description: Get all tasks with optional pagination or filtration by author
+        user ID
+      parameters:
+      - description: Filtration by author user ID of tasks
+        in: query
+        name: user_id
+        type: integer
+      - description: Size of page with tasks
+        in: query
+        name: limit
+        type: integer
+      - description: Shift of page with tasks
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success to get list of tasks
+          schema:
+            items:
+              $ref: '#/definitions/internal_features_tasks_transport_http.TasksDTOResponse'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+      summary: Get Tasks
+      tags:
+      - tasks
+    post:
+      consumes:
+      - application/json
+      description: Create new task
+      parameters:
+      - description: CreateTask request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_features_tasks_transport_http.CreateTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Success to create new task
+          schema:
+            $ref: '#/definitions/internal_features_tasks_transport_http.CreateTaskResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Author not found
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+      summary: Create Task
+      tags:
+      - tasks
+  /tasks/{id}:
+    delete:
+      description: Delete task by ID
+      parameters:
+      - description: task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: Success to delete task
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Task not found
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+      summary: Delete Task
+      tags:
+      - tasks
+    get:
+      description: Get task by ID
+      parameters:
+      - description: task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success to get task
+          schema:
+            $ref: '#/definitions/internal_features_tasks_transport_http.GetTaskResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Task not found
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+      summary: Get Task
+      tags:
+      - tasks
+    patch:
+      consumes:
+      - application/json
+      description: |-
+        Update task by ID
+        ### Field update behavior (three-state logic):
+        1. **Field omitted**: `description` is ignored; the existing database value remains unchanged.
+        2. **Value provided**: `"description": "2 liters"` updates the database value.
+        3. **Explicit null**: `"description": null` sets the database value to `NULL`.
+        **Restriction**: `title` and `completed` can't be `null`.
+      parameters:
+      - description: task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: PatchTask request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_features_tasks_transport_http.PatchTaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success to update task
+          schema:
+            $ref: '#/definitions/internal_features_tasks_transport_http.PatchTaskResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Task not found
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+      summary: Update Task
+      tags:
+      - tasks
+  /users:
+    get:
+      description: Get all users with optional pagination
+      parameters:
+      - description: Size of page with users
+        in: query
+        name: limit
+        type: integer
+      - description: Shift of page with users
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success to get list of users
+          schema:
+            items:
+              $ref: '#/definitions/internal_features_users_transport_http.UserDTOResponse'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+      summary: Get Users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create new user
+      parameters:
+      - description: CreateUser request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_features_users_transport_http.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Success to create new user
+          schema:
+            $ref: '#/definitions/internal_features_users_transport_http.CreateUserResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+      summary: Create User
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      description: Delete user by ID
+      parameters:
+      - description: user ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: Success to delete user
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+      summary: Delete User
+      tags:
+      - users
+    get:
+      description: Get user by ID
+      parameters:
+      - description: user ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success to get user
+          schema:
+            $ref: '#/definitions/internal_features_users_transport_http.GetUserResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+      summary: Get User
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      description: |-
+        Update user by ID
+        ### Field update behavior (three-state logic):
+        1. **Field omitted**: `phone_number` is ignored; the existing database value remains unchanged.
+        2. **Value provided**: `"phone_number": "+71112223344"` updates the database value.
+        3. **Explicit null**: `"phone_number": null` sets the database value to `NULL`.
+        **Restriction**: `full_name` cannot be `null`.
+      parameters:
+      - description: user ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: PatchUser request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_features_users_transport_http.PatchUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success to update user
+          schema:
+            $ref: '#/definitions/internal_features_users_transport_http.PatchUserResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse'
+      summary: Update User
+      tags:
+      - users
+swagger: "2.0"

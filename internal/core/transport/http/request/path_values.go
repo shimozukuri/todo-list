@@ -2,9 +2,9 @@ package core_http_request
 
 import (
 	"fmt"
+	core_errors "github.com/shimozukuri/todo-list/internal/core/errors"
 	"net/http"
 	"strconv"
-	core_errors "todo-list/internal/core/errors"
 )
 
 func GetIntPathValue(r *http.Request, key string) (int, error) {

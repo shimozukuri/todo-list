@@ -1,8 +1,8 @@
 package tasks_postgres_repository
 
 import (
+	"github.com/shimozukuri/todo-list/internal/core/domain"
 	"time"
-	"todo-list/internal/core/domain"
 )
 
 type TaskModel struct {

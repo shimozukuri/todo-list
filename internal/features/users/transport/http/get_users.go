@@ -3,13 +3,25 @@ package users_transport_http
 import (
 	"fmt"
 	"net/http"
-	core_logger "todo-list/internal/core/logger"
-	"todo-list/internal/core/transport/http/request"
-	core_http_response "todo-list/internal/core/transport/http/response"
+
+	core_logger "github.com/shimozukuri/todo-list/internal/core/logger"
+	"github.com/shimozukuri/todo-list/internal/core/transport/http/request"
+	core_http_response "github.com/shimozukuri/todo-list/internal/core/transport/http/response"
 )
 
 type GetUsersResponse []UserDTOResponse
 
+// GetUsers 	godoc
+// @Summary 	Get Users
+// @Description Get all users with optional pagination
+// @Tags 		users
+// @Produce 	json
+// @Param 		limit query int false "Size of page with users"
+// @Param 		offset query int false "Shift of page with users"
+// @Success 	200 {object} GetUsersResponse "Success to get list of users"
+// @Failure 	400 {object} core_http_response.ErrorResponse "Bad request"
+// @Failure 	500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Router 		/users [get]
 func (h *UsersHTTPHandler) GetUsers(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)

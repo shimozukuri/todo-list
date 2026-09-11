@@ -1,14 +1,14 @@
 package statistics_transport_http
 
 import (
-	"todo-list/internal/core/domain"
+	"github.com/shimozukuri/todo-list/internal/core/domain"
 )
 
 type StatisticsDTOResponse struct {
-	TasksCreated               int      `json:"tasks_created"`
-	TasksCompleted             int      `json:"tasks_completed"`
-	TasksCompletedRate         *float64 `json:"tasks_completed_rate"`
-	TasksAverageCompletionTime *string  `json:"tasks_average_completion_time"`
+	TasksCreated               int      `json:"tasks_created" example:"20"`
+	TasksCompleted             int      `json:"tasks_completed" example:"2"`
+	TasksCompletedRate         *float64 `json:"tasks_completed_rate" example:"10"`
+	TasksAverageCompletionTime *string  `json:"tasks_average_completion_time" example:"5m30s"`
 }
 
 func statisticDTOFromDomain(statistic domain.Statistics) StatisticsDTOResponse {

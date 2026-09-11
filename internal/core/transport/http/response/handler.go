@@ -5,8 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	core_errors "todo-list/internal/core/errors"
-	core_logger "todo-list/internal/core/logger"
+
+	core_errors "github.com/shimozukuri/todo-list/internal/core/errors"
+	core_logger "github.com/shimozukuri/todo-list/internal/core/logger"
 
 	"go.uber.org/zap"
 )
@@ -86,9 +87,9 @@ func (h *HTTPResponseHandler) errorResponse(
 	err error,
 	msg string,
 ) {
-	response := map[string]string{
-		"message": msg,
-		"error":   err.Error(),
+	response := ErrorResponse{
+		Error:   err.Error(),
+		Message: msg,
 	}
 
 	h.JSONResponse(

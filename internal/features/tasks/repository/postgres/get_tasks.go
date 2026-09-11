@@ -3,7 +3,7 @@ package tasks_postgres_repository
 import (
 	"context"
 	"fmt"
-	"todo-list/internal/core/domain"
+	"github.com/shimozukuri/todo-list/internal/core/domain"
 )
 
 func (r *TasksRepository) GetTasks(

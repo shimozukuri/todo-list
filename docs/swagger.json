@@ -1,0 +1,904 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "ToDo Application REST-API scheme",
+        "title": "Golang ToDo API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "127.0.0.1:5050",
+    "basePath": "/api/v1",
+    "paths": {
+        "/statistics": {
+            "get": {
+                "description": "Get statistics with optional filtering by author user ID and date range",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "statistics"
+                ],
+                "summary": "Get statistics",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Filter by author user ID",
+                        "name": "user_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Start date for statistics calculation (inclusive), format: YYYY-MM-DD",
+                        "name": "from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "End date for statistics calculation (exclusive), format: YYYY-MM-DD",
+                        "name": "to",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success to get statistics",
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_statistics_transport_http.GetStatisticsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks": {
+            "get": {
+                "description": "Get all tasks with optional pagination or filtration by author user ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Get Tasks",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Filtration by author user ID of tasks",
+                        "name": "user_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Size of page with tasks",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Shift of page with tasks",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success to get list of tasks",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_features_tasks_transport_http.TasksDTOResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new task",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Create Task",
+                "parameters": [
+                    {
+                        "description": "CreateTask request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_tasks_transport_http.CreateTaskRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success to create new task",
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_tasks_transport_http.CreateTaskResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Author not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/{id}": {
+            "get": {
+                "description": "Get task by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Get Task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "task ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success to get task",
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_tasks_transport_http.GetTaskResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Task not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete task by ID",
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Delete Task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "task ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Success to delete task"
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Task not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Update task by ID\n### Field update behavior (three-state logic):\n1. **Field omitted**: `description` is ignored; the existing database value remains unchanged.\n2. **Value provided**: `\"description\": \"2 liters\"` updates the database value.\n3. **Explicit null**: `\"description\": null` sets the database value to `NULL`.\n**Restriction**: `title` and `completed` can't be `null`.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tasks"
+                ],
+                "summary": "Update Task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "task ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "PatchTask request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_tasks_transport_http.PatchTaskRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success to update task",
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_tasks_transport_http.PatchTaskResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Task not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "description": "Get all users with optional pagination",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get Users",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Size of page with users",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Shift of page with users",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success to get list of users",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_features_users_transport_http.UserDTOResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create new user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Create User",
+                "parameters": [
+                    {
+                        "description": "CreateUser request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_users_transport_http.CreateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success to create new user",
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_users_transport_http.CreateUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "description": "Get user by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success to get user",
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_users_transport_http.GetUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete user by ID",
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Success to delete user"
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Update user by ID\n### Field update behavior (three-state logic):\n1. **Field omitted**: `phone_number` is ignored; the existing database value remains unchanged.\n2. **Value provided**: `\"phone_number\": \"+71112223344\"` updates the database value.\n3. **Explicit null**: `\"phone_number\": null` sets the database value to `NULL`.\n**Restriction**: `full_name` cannot be `null`.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update User",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "user ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "PatchUser request body",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_users_transport_http.PatchUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success to update user",
+                        "schema": {
+                            "$ref": "#/definitions/internal_features_users_transport_http.PatchUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "github_com_shimozukuri_todo-list_internal_core_transport_http_response.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "full error text"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "short human-readable message"
+                }
+            }
+        },
+        "internal_features_statistics_transport_http.GetStatisticsResponse": {
+            "type": "object",
+            "properties": {
+                "tasks_average_completion_time": {
+                    "type": "string",
+                    "example": "5m30s"
+                },
+                "tasks_completed": {
+                    "type": "integer",
+                    "example": 2
+                },
+                "tasks_completed_rate": {
+                    "type": "number",
+                    "example": 10
+                },
+                "tasks_created": {
+                    "type": "integer",
+                    "example": 20
+                }
+            }
+        },
+        "internal_features_tasks_transport_http.CreateTaskRequest": {
+            "type": "object",
+            "required": [
+                "author_user_id",
+                "title"
+            ],
+            "properties": {
+                "author_user_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "description": {
+                    "type": "string",
+                    "maxLength": 1000,
+                    "minLength": 1,
+                    "example": "2 liters"
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 1,
+                    "example": "Buy CocaCola"
+                }
+            }
+        },
+        "internal_features_tasks_transport_http.CreateTaskResponse": {
+            "type": "object",
+            "properties": {
+                "author_user_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "completed": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "completed_at": {
+                    "type": "string",
+                    "example": "2006-01-01T00:00:00.000000Z"
+                },
+                "created_at": {
+                    "type": "string",
+                    "example": "null"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "2 liters"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Buy CocaCola"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "internal_features_tasks_transport_http.GetTaskResponse": {
+            "type": "object",
+            "properties": {
+                "author_user_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "completed": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "completed_at": {
+                    "type": "string",
+                    "example": "2006-01-01T00:00:00.000000Z"
+                },
+                "created_at": {
+                    "type": "string",
+                    "example": "null"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "2 liters"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Buy CocaCola"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "internal_features_tasks_transport_http.PatchTaskRequest": {
+            "type": "object",
+            "properties": {
+                "completed": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "description": {
+                    "type": "string",
+                    "example": "1 kilogram"
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Buy chicken"
+                }
+            }
+        },
+        "internal_features_tasks_transport_http.PatchTaskResponse": {
+            "type": "object",
+            "properties": {
+                "author_user_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "completed": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "completed_at": {
+                    "type": "string",
+                    "example": "2006-01-01T00:00:00.000000Z"
+                },
+                "created_at": {
+                    "type": "string",
+                    "example": "null"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "2 liters"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Buy CocaCola"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "internal_features_tasks_transport_http.TasksDTOResponse": {
+            "type": "object",
+            "properties": {
+                "author_user_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "completed": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "completed_at": {
+                    "type": "string",
+                    "example": "2006-01-01T00:00:00.000000Z"
+                },
+                "created_at": {
+                    "type": "string",
+                    "example": "null"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "2 liters"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "title": {
+                    "type": "string",
+                    "example": "Buy CocaCola"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "internal_features_users_transport_http.CreateUserRequest": {
+            "type": "object",
+            "required": [
+                "full_name"
+            ],
+            "properties": {
+                "full_name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3,
+                    "example": "Ivan Ivanov"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 10,
+                    "example": "+79998887766"
+                }
+            }
+        },
+        "internal_features_users_transport_http.CreateUserResponse": {
+            "type": "object",
+            "properties": {
+                "full_name": {
+                    "type": "string",
+                    "example": "Ivan Ivanov"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+79998887766"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "internal_features_users_transport_http.GetUserResponse": {
+            "type": "object",
+            "properties": {
+                "full_name": {
+                    "type": "string",
+                    "example": "Ivan Ivanov"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+79998887766"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "internal_features_users_transport_http.PatchUserRequest": {
+            "type": "object",
+            "properties": {
+                "full_name": {
+                    "type": "string",
+                    "example": "Petr Petrovich"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+71112223344"
+                }
+            }
+        },
+        "internal_features_users_transport_http.PatchUserResponse": {
+            "type": "object",
+            "properties": {
+                "full_name": {
+                    "type": "string",
+                    "example": "Ivan Ivanov"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+79998887766"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "internal_features_users_transport_http.UserDTOResponse": {
+            "type": "object",
+            "properties": {
+                "full_name": {
+                    "type": "string",
+                    "example": "Ivan Ivanov"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+79998887766"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        }
+    }
+}

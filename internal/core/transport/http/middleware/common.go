@@ -3,8 +3,9 @@ package core_http_middleware
 import (
 	"net/http"
 	"time"
-	core_logger "todo-list/internal/core/logger"
-	core_http_response "todo-list/internal/core/transport/http/response"
+
+	core_logger "github.com/shimozukuri/todo-list/internal/core/logger"
+	core_http_response "github.com/shimozukuri/todo-list/internal/core/transport/http/response"
 
 	"github.com/google/uuid"
 	"go.uber.org/zap"
@@ -13,6 +14,31 @@ import (
 const (
 	requestIDKey = "X-Request-Id"
 )
+
+func CORS() Middleware {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			allowedOrigins := map[string]struct{}{
+				"http://localhost:5050": {},
+			}
+
+			origin := r.Header.Get("Origin")
+
+			if _, ok := allowedOrigins[origin]; ok {
+				w.Header().Set("Access-Control-Allow-Origin", origin)
+				w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PATCH, DELETE")
+				w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+			}
+
+			if r.Method == http.MethodOptions {
+				w.WriteHeader(http.StatusOK)
+				return
+			}
+
+			next.ServeHTTP(w, r)
+		})
+	}
+}
 
 func RequestID() Middleware {
 	return func(next http.Handler) http.Handler {

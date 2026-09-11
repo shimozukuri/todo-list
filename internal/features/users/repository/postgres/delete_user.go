@@ -3,7 +3,7 @@ package users_postgres_repository
 import (
 	"context"
 	"fmt"
-	core_errors "todo-list/internal/core/errors"
+	core_errors "github.com/shimozukuri/todo-list/internal/core/errors"
 )
 
 func (r *UsersRepository) DeleteUser(

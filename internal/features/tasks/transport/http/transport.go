@@ -2,9 +2,9 @@ package tasks_transport_http
 
 import (
 	"context"
+	"github.com/shimozukuri/todo-list/internal/core/domain"
+	core_http_server "github.com/shimozukuri/todo-list/internal/core/transport/http/server"
 	"net/http"
-	"todo-list/internal/core/domain"
-	core_http_server "todo-list/internal/core/transport/http/server"
 )
 
 type TasksHTTPHandler struct {

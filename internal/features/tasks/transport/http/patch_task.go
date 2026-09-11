@@ -3,17 +3,18 @@ package tasks_transport_http
 import (
 	"fmt"
 	"net/http"
-	"todo-list/internal/core/domain"
-	core_logger "todo-list/internal/core/logger"
-	core_http_request "todo-list/internal/core/transport/http/request"
-	core_http_response "todo-list/internal/core/transport/http/response"
-	core_http_types "todo-list/internal/core/transport/http/types"
+
+	"github.com/shimozukuri/todo-list/internal/core/domain"
+	core_logger "github.com/shimozukuri/todo-list/internal/core/logger"
+	core_http_request "github.com/shimozukuri/todo-list/internal/core/transport/http/request"
+	core_http_response "github.com/shimozukuri/todo-list/internal/core/transport/http/response"
+	core_http_types "github.com/shimozukuri/todo-list/internal/core/transport/http/types"
 )
 
 type PatchTaskRequest struct {
-	Title       core_http_types.Nullable[string] `json:"title"`
-	Description core_http_types.Nullable[string] `json:"description"`
-	Completed   core_http_types.Nullable[bool]   `json:"completed"`
+	Title       core_http_types.Nullable[string] `json:"title" swaggertype:"string" example:"Buy chicken"`
+	Description core_http_types.Nullable[string] `json:"description" swaggertype:"string" example:"1 kilogram"`
+	Completed   core_http_types.Nullable[bool]   `json:"completed" swaggertype:"boolean" example:"true"`
 }
 
 func (r *PatchTaskRequest) Validate() error {
@@ -44,6 +45,25 @@ func (r *PatchTaskRequest) Validate() error {
 
 type PatchTaskResponse TasksDTOResponse
 
+// PatchTask	godoc
+// @Summary 	Update Task
+// @Description Update task by ID
+// @Description ### Field update behavior (three-state logic):
+// @Description 1. **Field omitted**: `description` is ignored; the existing database value remains unchanged.
+// @Description 2. **Value provided**: `"description": "2 liters"` updates the database value.
+// @Description 3. **Explicit null**: `"description": null` sets the database value to `NULL`.
+// @Description **Restriction**: `title` and `completed` can't be `null`.
+// @Tags 		tasks
+// @Accept 		json
+// @Produce 	json
+// @Param 		id path int true "task ID"
+// @Param		request body PatchTaskRequest true "PatchTask request body"
+// @Success 	200 {object} PatchTaskResponse "Success to update task"
+// @Failure 	400 {object} core_http_response.ErrorResponse "Bad request"
+// @Failure 	404 {object} core_http_response.ErrorResponse "Task not found"
+// @Failure 	409 {object} core_http_response.ErrorResponse "Conflict"
+// @Failure 	500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Router 		/tasks/{id} [patch]
 func (h *TasksHTTPHandler) PatchTask(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)
