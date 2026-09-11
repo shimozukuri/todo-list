@@ -2,8 +2,8 @@ package domain
 
 import (
 	"fmt"
+	core_errors "github.com/shimozukuri/todo-list/internal/core/errors"
 	"regexp"
-	core_errors "todo-list/internal/core/errors"
 )
 
 type User struct {

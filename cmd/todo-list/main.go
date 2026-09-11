@@ -7,24 +7,32 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-	"todo-list/internal/core/config"
-	core_logger "todo-list/internal/core/logger"
-	"todo-list/internal/core/repository/postgres/pool/pgx"
-	core_http_middleware "todo-list/internal/core/transport/http/middleware"
-	core_http_server "todo-list/internal/core/transport/http/server"
-	statistics_postgres_repository "todo-list/internal/features/statistics/repository/postgres"
-	statistics_service "todo-list/internal/features/statistics/service"
-	statistics_transport_http "todo-list/internal/features/statistics/transport/http"
-	tasks_postgres_repository "todo-list/internal/features/tasks/repository/postgres"
-	tasks_service "todo-list/internal/features/tasks/service"
-	tasks_transport_http "todo-list/internal/features/tasks/transport/http"
-	users_postgres_repository "todo-list/internal/features/users/repository/postgres"
-	users_service "todo-list/internal/features/users/service"
-	users_transport_http "todo-list/internal/features/users/transport/http"
+
+	"github.com/shimozukuri/todo-list/internal/core/config"
+	core_logger "github.com/shimozukuri/todo-list/internal/core/logger"
+	"github.com/shimozukuri/todo-list/internal/core/repository/postgres/pool/pgx"
+	core_http_middleware "github.com/shimozukuri/todo-list/internal/core/transport/http/middleware"
+	core_http_server "github.com/shimozukuri/todo-list/internal/core/transport/http/server"
+	statistics_postgres_repository "github.com/shimozukuri/todo-list/internal/features/statistics/repository/postgres"
+	statistics_service "github.com/shimozukuri/todo-list/internal/features/statistics/service"
+	statistics_transport_http "github.com/shimozukuri/todo-list/internal/features/statistics/transport/http"
+	tasks_postgres_repository "github.com/shimozukuri/todo-list/internal/features/tasks/repository/postgres"
+	tasks_service "github.com/shimozukuri/todo-list/internal/features/tasks/service"
+	tasks_transport_http "github.com/shimozukuri/todo-list/internal/features/tasks/transport/http"
+	users_postgres_repository "github.com/shimozukuri/todo-list/internal/features/users/repository/postgres"
+	users_service "github.com/shimozukuri/todo-list/internal/features/users/service"
+	users_transport_http "github.com/shimozukuri/todo-list/internal/features/users/transport/http"
 
 	"go.uber.org/zap"
+
+	_ "github.com/shimozukuri/todo-list/docs"
 )
 
+// @title 		Golang ToDo API
+// @version 	1.0
+// @description ToDo Application REST-API scheme
+// @host 	  	127.0.0.1:5050
+// @BasePath 	/api/v1
 func main() {
 	cfg := core_config.NewConfigMust()
 	time.Local = cfg.TimeZone
@@ -73,6 +81,7 @@ func main() {
 	httpServer := core_http_server.NewHTTPServer(
 		core_http_server.NewConfigMust(),
 		logger,
+		core_http_middleware.CORS(),
 		core_http_middleware.RequestID(),
 		core_http_middleware.Logger(logger),
 		core_http_middleware.Trace(),
@@ -83,6 +92,8 @@ func main() {
 	apiVersionRouter.RegisterRouters(tasksTransportHTTP.Routes()...)
 	apiVersionRouter.RegisterRouters(statisticsTransportHTTP.Routes()...)
 	httpServer.RegisterAPIRouters(apiVersionRouter)
+
+	httpServer.RegisterSwagger()
 
 	if err = httpServer.Run(ctx); err != nil {
 		logger.Error("HTTP server run error", zap.Error(err))

@@ -2,7 +2,7 @@ package users_service
 
 import (
 	"context"
-	"todo-list/internal/core/domain"
+	"github.com/shimozukuri/todo-list/internal/core/domain"
 )
 
 type UsersService struct {

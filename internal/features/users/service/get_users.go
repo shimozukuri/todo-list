@@ -3,8 +3,8 @@ package users_service
 import (
 	"context"
 	"fmt"
-	"todo-list/internal/core/domain"
-	core_errors "todo-list/internal/core/errors"
+	"github.com/shimozukuri/todo-list/internal/core/domain"
+	core_errors "github.com/shimozukuri/todo-list/internal/core/errors"
 )
 
 func (s *UsersService) GetUsers(

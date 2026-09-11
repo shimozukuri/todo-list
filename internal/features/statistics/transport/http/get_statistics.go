@@ -4,13 +4,26 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-	core_logger "todo-list/internal/core/logger"
-	core_http_request "todo-list/internal/core/transport/http/request"
-	core_http_response "todo-list/internal/core/transport/http/response"
+
+	core_logger "github.com/shimozukuri/todo-list/internal/core/logger"
+	core_http_request "github.com/shimozukuri/todo-list/internal/core/transport/http/request"
+	core_http_response "github.com/shimozukuri/todo-list/internal/core/transport/http/response"
 )
 
 type GetStatisticsResponse StatisticsDTOResponse
 
+// GetStatistics godoc
+// @Summary 	 Get statistics
+// @Description  Get statistics with optional filtering by author user ID and date range
+// @Tags         statistics
+// @Produce      json
+// @Param        user_id query int false "Filter by author user ID"
+// @Param        from query string false "Start date for statistics calculation (inclusive), format: YYYY-MM-DD"
+// @Param        to query string false "End date for statistics calculation (exclusive), format: YYYY-MM-DD"
+// @Success 	 200 {object} GetStatisticsResponse "Success to get statistics"
+// @Failure 	 400 {object} core_http_response.ErrorResponse "Bad request"
+// @Failure 	 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Router 		 /statistics [get]
 func (h *StatisticsHTTPHandler) GetStatistics(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)

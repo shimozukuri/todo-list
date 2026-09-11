@@ -3,8 +3,8 @@ package core_http_request
 import (
 	"encoding/json"
 	"fmt"
+	core_errors "github.com/shimozukuri/todo-list/internal/core/errors"
 	"net/http"
-	core_errors "todo-list/internal/core/errors"
 
 	"github.com/go-playground/validator/v10"
 )

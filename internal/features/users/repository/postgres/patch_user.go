@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"todo-list/internal/core/domain"
-	core_errors "todo-list/internal/core/errors"
-	core_postgres_pool "todo-list/internal/core/repository/postgres/pool"
+	"github.com/shimozukuri/todo-list/internal/core/domain"
+	core_errors "github.com/shimozukuri/todo-list/internal/core/errors"
+	core_postgres_pool "github.com/shimozukuri/todo-list/internal/core/repository/postgres/pool"
 )
 
 func (r *UsersRepository) PatchUser(

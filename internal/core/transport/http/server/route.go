@@ -1,8 +1,8 @@
 package core_http_server
 
 import (
+	core_http_middleware "github.com/shimozukuri/todo-list/internal/core/transport/http/middleware"
 	"net/http"
-	core_http_middleware "todo-list/internal/core/transport/http/middleware"
 )
 
 type Route struct {

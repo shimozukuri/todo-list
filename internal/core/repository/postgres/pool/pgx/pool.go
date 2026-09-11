@@ -3,8 +3,8 @@ package core_pgx_pool
 import (
 	"context"
 	"fmt"
+	core_postgres_pool "github.com/shimozukuri/todo-list/internal/core/repository/postgres/pool"
 	"time"
-	core_postgres_pool "todo-list/internal/core/repository/postgres/pool"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )

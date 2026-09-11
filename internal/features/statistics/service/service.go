@@ -2,8 +2,8 @@ package statistics_service
 
 import (
 	"context"
+	"github.com/shimozukuri/todo-list/internal/core/domain"
 	"time"
-	"todo-list/internal/core/domain"
 )
 
 type StatisticsService struct {

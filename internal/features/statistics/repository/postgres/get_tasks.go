@@ -3,9 +3,9 @@ package statistics_postgres_repository
 import (
 	"context"
 	"fmt"
+	"github.com/shimozukuri/todo-list/internal/core/domain"
 	"strings"
 	"time"
-	"todo-list/internal/core/domain"
 )
 
 func (r *StatisticsRepository) GetTasks(

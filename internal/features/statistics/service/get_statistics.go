@@ -3,9 +3,9 @@ package statistics_service
 import (
 	"context"
 	"fmt"
+	"github.com/shimozukuri/todo-list/internal/core/domain"
+	core_errors "github.com/shimozukuri/todo-list/internal/core/errors"
 	"time"
-	"todo-list/internal/core/domain"
-	core_errors "todo-list/internal/core/errors"
 )
 
 func (s *StatisticsService) GetStatistics(

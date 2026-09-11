@@ -1,6 +1,6 @@
 package statistics_postgres_repository
 
-import core_postgres_pool "todo-list/internal/core/repository/postgres/pool"
+import core_postgres_pool "github.com/shimozukuri/todo-list/internal/core/repository/postgres/pool"
 
 type StatisticsRepository struct {
 	pool core_postgres_pool.Pool

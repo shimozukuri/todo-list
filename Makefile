@@ -73,5 +73,13 @@ todolist-deploy:
 todolist-undeploy:
 	@docker compose down todolist
 
+swagger-gen:
+	@docker compose run --rm swagger \
+		init \
+		-g cmd/todo-list/main.go \
+		-o docs \
+		--parseInternal \
+		--parseDependency
+
 ps:
 	@docker compose ps

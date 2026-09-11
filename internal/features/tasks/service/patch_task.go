@@ -3,7 +3,7 @@ package tasks_service
 import (
 	"context"
 	"fmt"
-	"todo-list/internal/core/domain"
+	"github.com/shimozukuri/todo-list/internal/core/domain"
 )
 
 func (s *TasksService) PatchTask(

@@ -1,6 +1,6 @@
 package users_postgres_repository
 
-import "todo-list/internal/core/domain"
+import "github.com/shimozukuri/todo-list/internal/core/domain"
 
 type UserModel struct {
 	ID          int

@@ -2,7 +2,7 @@ package core_http_types
 
 import (
 	"encoding/json"
-	"todo-list/internal/core/domain"
+	"github.com/shimozukuri/todo-list/internal/core/domain"
 )
 
 type Nullable[T any] struct {
